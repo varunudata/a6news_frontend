@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-export default function protectedPage() {
+export default function ProtectedPage() {
   const [message, setMessage] = useState("");
   const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
   const router = useRouter();
