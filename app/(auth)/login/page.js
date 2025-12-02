@@ -12,18 +12,24 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${backend_url}/login`, {
+      const res = await fetch(`${backend_url}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
 
       const data = await res.json();
+      console.log("Login response", data);
       if (data.success) {
         toast.success(data.message);
         localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.role);
         setTimeout(() => {
-          router.push("/");
+          if (data.role === "admin") {
+            router.push("/admin");
+          } else {
+            router.push("/");
+          }
         }, 2000);
       } else {
         toast.error(data.message);

@@ -1,21 +1,21 @@
-"use client";
-
-import { useState } from "react";
-import Navbar from "./components/navbar/page";
-import NavContents from "./components/navContents/page";
-import Hero from "./components/hero/page";
-import Latest from "./components/latest/page";
-import Posts from "./components/posts/page";
+import Navbar from "./components/layout/Navbar";
+import NavContents from "./components/layout/NavContents";
+import Hero from "./components/home/Hero";
+import Latest from "./components/home/Latest";
+import Posts from "./components/layout/Posts";
+import Footer from "./components/layout/Footer";
 
 export default function Home() {
-  const [hello, setHello] = useState();
   return (
-    <div>
+    <>
       <Navbar />
-      <NavContents />
-      <Hero />
-      <Latest />
-      <Posts />
-    </div>
+      <main>
+        <NavContents />
+        <Hero />
+        <Latest />
+        <Posts />
+      </main>
+      <Footer />
+    </>
   );
 }

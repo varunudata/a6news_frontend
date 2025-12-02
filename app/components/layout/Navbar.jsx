@@ -13,17 +13,18 @@ export default function Navbar() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
-  });
+  },[]);
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("role")
     setIsLoggedIn(false);
     router.push("/login");
   };
   return (
-    <div>
-      <div className="flex h-20 w-full justify-between p-4 items-center">
+    <div className="flex items-center justify-center">
+      <div className="flex h-20 w-full justify-between p-4 items-center ">
         <div className="w-40">
-          <img src={logo}></img>
+          <img src={logo} alt="logo" className="w-full h-auto"></img>
         </div>
         <div className="flex gap-5">
           <a
@@ -74,3 +75,4 @@ export default function Navbar() {
     </div>
   );
 }
+
