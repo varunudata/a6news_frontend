@@ -58,20 +58,21 @@ export default function Footer() {
         <div>
           <h3 className="font-semibold mb-3 text-xl">Quick Links</h3>
           <ul className="space-y-2">
-            <li><Link href="/" className="hover:underline">Home</Link></li>>
-            <li><Link href="/contact" className="hover:underline">Contact</Link></li>
-            <li><Link href="/privacy" className="hover:underline">Privacy Policy</Link></li>
+            <li><Link href="/" className="hover:underline">Home</Link></li>
+            <li><Link href="/#" className="hover:underline">About Us</Link></li>
+            <li><Link href="/#" className="hover:underline">Contact</Link></li>
+            <li><Link href="/#" className="hover:underline">Privacy Policy</Link></li>
           </ul>
         </div>
 
         <div>
           <h3 className="font-semibold mb-3 text-xl">Categories</h3>
           <ul className="space-y-2">
-            <li><Link href="/nh-projects" className="hover:underline">NH Projects</Link></li>
-            <li><Link href="/express-ways" className="hover:underline">Express Ways</Link></li>
-            <li><Link href="/airports" className="hover:underline">Airports</Link></li>
-            <li><Link href="/railway-projects" className="hover:underline">Railway Projects</Link></li>
-            <li><Link href="/city-infra" className="hover:underline">City Infra</Link></li>
+            <li><Link href="/#" className="hover:underline">NH Projects</Link></li>
+            <li><Link href="/#" className="hover:underline">Express Ways</Link></li>
+            <li><Link href="/#" className="hover:underline">Airports</Link></li>
+            <li><Link href="/#" className="hover:underline">Railway Projects</Link></li>
+            <li><Link href="/#" className="hover:underline">City Infra</Link></li>
           </ul>
         </div>
 
