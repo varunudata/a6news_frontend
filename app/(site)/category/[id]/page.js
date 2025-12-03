@@ -21,6 +21,7 @@ export default function CategoryPage() {
   const [loading, setLoading] = useState(true);
 
   const fetchData = async (page = 1, sortValue = sort) => {
+    if (!categoryId || categoryId === "undefined") return;
     try {
       const res = await fetch(
         `${backendUrl}/api/categories/${categoryId}?page=${page}&sort=${sortValue}`
@@ -28,8 +29,9 @@ export default function CategoryPage() {
       const data = await res.json();
 
       if (data.success) {
-        setCategory(data.data.category || []);
+        setCategory(data.data.category || null);
         setPosts(data.data.posts || []);
+
         setPagination(
           data?.data?.pagination ?? {
             currentPage: 1,
@@ -46,9 +48,9 @@ export default function CategoryPage() {
   };
 
   useEffect(() => {
-    if (!categoryId || categoryId === "undefined") {
-      return;
-    }
+    if (!categoryId || categoryId === "undefined") return;
+
+    setLoading(true);
     fetchData(1, sort);
   }, [categoryId, sort]);
 
