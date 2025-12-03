@@ -19,22 +19,22 @@ export default function Hero() {
   const [index, setIndex] = useState(0);
   const images = [img0, img4, img5, img1, img2, img3];
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setIndex((prev) => (prev + 1) % images.length);
-  //   }, 3000);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % images.length);
+    }, 3000);
 
-  //   return () => clearInterval(interval);
-  // }, []);
+    return () => clearInterval(interval);
+  }, []);
 
-  // useEffect(() => {
-  //   if (sliderRef.current) {
-  //     sliderRef.current.scrollTo({
-  //       left: sliderRef.current.clientWidth * index,
-  //       behavior: "smooth",
-  //     });
-  //   }
-  // }, [index]);
+  useEffect(() => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo({
+        left: sliderRef.current.clientWidth * index,
+        behavior: "smooth",
+      });
+    }
+  }, [index]);
 
   return (
     <div className="relative w-full overflow-hidden">
