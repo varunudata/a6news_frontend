@@ -69,7 +69,7 @@ export default function AllPostsPage() {
 
         <button
           onClick={() => router.push("/admin/posts/create")}
-          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 cursor-pointer"
         >
           + Create New Post
         </button>

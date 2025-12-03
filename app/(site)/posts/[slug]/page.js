@@ -15,7 +15,9 @@ export default function SinglePostPage() {
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    if (!slug) return;
+    if (!slug || slug === "undefined" || slug === "null") return;
+
+    console.log("Slug on production", slug);
 
     const fetchPost = async () => {
       try {
