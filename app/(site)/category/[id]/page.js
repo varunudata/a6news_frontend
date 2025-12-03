@@ -28,8 +28,8 @@ export default function CategoryPage() {
       const data = await res.json();
 
       if (data.success) {
-        setCategory(data.data.category);
-        setPosts(data.data.posts);
+        setCategory(data.data.category || []);
+        setPosts(data.data.posts || []);
         setPagination(data.data.pagination);
       }
     } catch (err) {
