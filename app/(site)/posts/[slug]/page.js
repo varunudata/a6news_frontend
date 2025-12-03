@@ -40,13 +40,16 @@ export default function SinglePostPage() {
         const res = await fetch(`${backendUrl}/api/categories/${catId}`);
         const data = await res.json();
         if (data.success) {
-          setRelated(data.data.posts.filter((p) => p.slug !== slug));
+          const latestThree = data.data.posts
+            .filter((p) => p.slug !== slug)
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            .slice(0, 3);
+          setRelated(latestThree);
         }
       } catch (err) {
         console.log("Error fetching related posts:", err);
       }
     };
-
     fetchPost();
   }, [slug]);
 
