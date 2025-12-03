@@ -53,12 +53,9 @@ export default function CategoryPage() {
   return (
     <>
       <NavContents />
-
       <div className="w-[95%] mx-auto mt-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold text-red-600">{category?.name}</h1>
-
-          {/* SORT DROPDOWN */}
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
@@ -68,7 +65,6 @@ export default function CategoryPage() {
             <option value="oldest">Sort: Oldest</option>
           </select>
         </div>
-
         {loading ? (
           <div className="flex justify-center items-center h-[50vh] text-xl font-semibold">
             Loading...
@@ -77,7 +73,6 @@ export default function CategoryPage() {
           <div className="text-gray-500 text-lg">No posts available.</div>
         ) : (
           <>
-            {/* POST CARDS */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {posts.map((post) => (
                 <div
@@ -91,7 +86,6 @@ export default function CategoryPage() {
                       className="h-48 w-full object-cover"
                     />
                   )}
-
                   <div className="p-4">
                     <h3 className="font-bold text-lg">{post.title}</h3>
                     <p className="text-sm text-gray-600 mt-2 line-clamp-3">
@@ -107,8 +101,6 @@ export default function CategoryPage() {
                 </div>
               ))}
             </div>
-
-            {/* PAGINATION */}
             <div className="flex justify-center mt-10 gap-4 mb-10">
               <button
                 disabled={pagination.currentPage === 1}
@@ -117,11 +109,9 @@ export default function CategoryPage() {
               >
                 Prev
               </button>
-
               <span className="px-4 py-2 font-semibold">
                 Page {pagination.currentPage} of {pagination.totalPages}
               </span>
-
               <button
                 disabled={pagination.currentPage === pagination.totalPages}
                 onClick={() => handlePageChange(pagination.currentPage + 1)}
