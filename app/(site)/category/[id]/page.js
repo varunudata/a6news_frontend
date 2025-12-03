@@ -30,7 +30,13 @@ export default function CategoryPage() {
       if (data.success) {
         setCategory(data.data.category || []);
         setPosts(data.data.posts || []);
-        setPagination(data.data.pagination || []);
+        setPagination(
+          data?.data?.pagination ?? {
+            currentPage: 1,
+            totalPages: 1,
+            totalPosts: 0,
+          }
+        );
       }
     } catch (err) {
       console.log("Error loading category:", err);
@@ -40,7 +46,10 @@ export default function CategoryPage() {
   };
 
   useEffect(() => {
-    if (categoryId) fetchData(1, sort);
+    if (!categoryId || categoryId === "undefined") {
+      return;
+    }
+    fetchData(1, sort);
   }, [categoryId, sort]);
 
   const handlePageChange = (pg) => {
