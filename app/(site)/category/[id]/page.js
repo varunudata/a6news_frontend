@@ -30,7 +30,7 @@ export default function CategoryPage() {
       if (data.success) {
         setCategory(data.data.category || []);
         setPosts(data.data.posts || []);
-        setPagination(data.data.pagination);
+        setPagination(data.data.pagination || []);
       }
     } catch (err) {
       console.log("Error loading category:", err);
