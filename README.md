@@ -4,7 +4,7 @@ This is the frontend application for **A6News**, a modern news portal and Conten
 
 🔗 **[Backend Repository](https://github.com/varunudata/a6news_backend.git)**
 
-## ✨ Features
+##  Features
 
 - **Public News Site:**
   - Modern, responsive homepage with Hero, Latest News, and Category sections.
@@ -19,7 +19,7 @@ This is the frontend application for **A6News**, a modern news portal and Conten
   - Interactive notifications with React Toastify.
   - Beautiful, accessible icons using Lucide React.
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 - **Framework:** [Next.js 15](https://nextjs.org/) (App Router)
 - **Library:** [React 19](https://react.dev/)
@@ -27,7 +27,7 @@ This is the frontend application for **A6News**, a modern news portal and Conten
 - **Icons:** [Lucide React](https://lucide.dev/)
 - **Notifications:** [React Toastify](https://fkhadra.github.io/react-toastify/)
 
-## 📁 Directory Structure
+##  Directory Structure
 
 ```text
 client/
@@ -42,7 +42,7 @@ client/
 └── package.json        # Dependencies and scripts
 ```
 
-## 🚦 Getting Started
+##  Getting Started
 
 ### Prerequisites
 
