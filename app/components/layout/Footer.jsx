@@ -5,87 +5,91 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-[rgb(229,0,0)] text-white mt-10 pt-10 pb-6">
-      <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <footer className="bg-[#e50000] text-white mt-12 sm:mt-20 pt-16 pb-8 shadow-[0_-10px_40px_rgba(229,0,0,0.1)]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
 
-        <div>
-          <h2 className="text-2xl font-extrabold tracking-wide">A6NEWS</h2>
-          <p className="mt-3 text-sm text-red-100 leading-relaxed">
+        <div className="space-y-6">
+          <h2 className="text-3xl font-extrabold tracking-tight">A6NEWS</h2>
+          <p className="text-sm text-white/80 leading-relaxed pr-4">
             Your trusted source for structured updates on  
             National Highways, Expressways, Airports, Railways,  
             Infrastructure and Real-Time News.
           </p>
 
-          <div className="flex gap-4 mt-4">
+          <div className="flex gap-3 mt-4">
             <a
               href="https://www.youtube.com/@a6newsinfra"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-white text-red-600 transition hover:bg-[#FF0000] hover:text-white hover:scale-110"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-white transition-all duration-300 hover:bg-white hover:text-[#FF0000] hover:-translate-y-1"
             >
-              <Youtube size={20} />
+              <Youtube size={18} />
             </a>
 
             <a
               href="https://x.com/A6NewsTelugu?t=CLS91x4_28ro0cjprwyD9Q&s=08"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-white text-red-600 transition hover:bg-black hover:text-white hover:scale-110"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-white transition-all duration-300 hover:bg-white hover:text-[#1DA1F2] hover:-translate-y-1"
             >
-              <Twitter size={20} />
+              <Twitter size={18} />
             </a>
 
             <a
               href="https://www.facebook.com/share/16cLcBDyEh/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-white text-red-600 transition hover:bg-[#1877F2] hover:text-white hover:scale-110"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-white transition-all duration-300 hover:bg-white hover:text-[#1877F2] hover:-translate-y-1"
             >
-              <Facebook size={20} />
+              <Facebook size={18} />
             </a>
 
             <a
               href="https://www.instagram.com/a6newsinfra?igsh=MW5zcGRjYWMxcDAwMg=="
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-white text-red-600 transition hover:bg-linear-to-tr from-pink-500 via-red-500 to-yellow-500 hover:text-white hover:scale-110"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-white transition-all duration-300 hover:bg-white hover:text-pink-600 hover:-translate-y-1"
             >
-              <Instagram size={20} />
+              <Instagram size={18} />
             </a>
           </div>
         </div>
 
         <div>
-          <h3 className="font-semibold mb-3 text-xl">Quick Links</h3>
-          <ul className="space-y-2">
-            <li><Link href="/" className="hover:underline">Home</Link></li>
-            <li><Link href="/#" className="hover:underline">About Us</Link></li>
-            <li><Link href="/#" className="hover:underline">Contact</Link></li>
-            <li><Link href="/#" className="hover:underline">Privacy Policy</Link></li>
+          <h3 className="font-semibold mb-5 text-lg tracking-wide uppercase text-white/90">Quick Links</h3>
+          <ul className="space-y-3">
+            <li><Link href="/" className="text-sm text-white/80 hover:text-white transition-colors">Home</Link></li>
+            <li><Link href="/#" className="text-sm text-white/80 hover:text-white transition-colors">About Us</Link></li>
+            <li><Link href="/#" className="text-sm text-white/80 hover:text-white transition-colors">Contact</Link></li>
+            <li><Link href="/#" className="text-sm text-white/80 hover:text-white transition-colors">Privacy Policy</Link></li>
           </ul>
         </div>
 
         <div>
-          <h3 className="font-semibold mb-3 text-xl">Categories</h3>
-          <ul className="space-y-2">
-            <li><Link href="/#" className="hover:underline">NH Projects</Link></li>
-            <li><Link href="/#" className="hover:underline">Express Ways</Link></li>
-            <li><Link href="/#" className="hover:underline">Airports</Link></li>
-            <li><Link href="/#" className="hover:underline">Railway Projects</Link></li>
-            <li><Link href="/#" className="hover:underline">City Infra</Link></li>
+          <h3 className="font-semibold mb-5 text-lg tracking-wide uppercase text-white/90">Categories</h3>
+          <ul className="space-y-3">
+            <li><Link href="/#" className="text-sm text-white/80 hover:text-white transition-colors">NH Projects</Link></li>
+            <li><Link href="/#" className="text-sm text-white/80 hover:text-white transition-colors">Express Ways</Link></li>
+            <li><Link href="/#" className="text-sm text-white/80 hover:text-white transition-colors">Airports</Link></li>
+            <li><Link href="/#" className="text-sm text-white/80 hover:text-white transition-colors">Railway Projects</Link></li>
+            <li><Link href="/#" className="text-sm text-white/80 hover:text-white transition-colors">City Infra</Link></li>
           </ul>
         </div>
 
         <div>
-          <h3 className="font-semibold mb-3 text-xl">Contact Us</h3>
-          <p className="text-sm text-red-100">Have any suggestions or news updates?</p>
-          <p className="mt-2 text-sm">📧 contact@a6news.in</p>
-          <p className="text-sm mt-1">📍Vijayawada, Andhra Pradesh, India</p>
+          <h3 className="font-semibold mb-5 text-lg tracking-wide uppercase text-white/90">Contact Us</h3>
+          <div className="space-y-3 text-sm text-white/80 leading-relaxed">
+            <p>Have any suggestions or news updates?</p>
+            <p className="flex items-center gap-2 mt-2"><span className="text-lg">📧</span> contact@a6news.in</p>
+            <p className="flex items-start gap-2"><span className="text-lg">📍</span> Vijayawada,<br/>Andhra Pradesh, India</p>
+          </div>
         </div>
       </div>
 
-      <div className="mt-10 border-t border-red-300 pt-4 text-center text-sm text-red-100">
-        © {new Date().getFullYear()} <span className="font-semibold">A6NEWS</span>. All Rights Reserved.
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 pt-8 border-t border-red-500/50 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p className="text-sm text-white/70 text-center md:text-left">
+          © {new Date().getFullYear()} <span className="font-semibold text-white/90">A6NEWS</span>. All Rights Reserved.
+        </p>
       </div>
     </footer>
   );

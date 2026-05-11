@@ -1,257 +1,81 @@
-📰 A6News — Modern Full-Stack News & Infra Updates Platform
-Built with Next.js 14 (App Router), Node.js/Express, Prisma ORM, PostgreSQL, Cloudinary, JWT Auth, TailwindCSS
-🚀 Overview
-
-A6News is a full-stack news publishing platform where admins can upload articles, add categories, manage posts, and provide infrastructure updates.
-Users can browse posts, filter by category, view latest posts, and read detailed articles.
-
-This project contains:
-
-Frontend (Next.js)
-
-Modern UI built using Next.js App Router
-
-Fully responsive news homepage
-
-Category-based browsing
-
-Rich single post page with related posts
-
-Hero slider, latest news, auto-curated category cards
-
-Cloudinary image previews
-
-Admin panel UI included
-
-JWT-based login and protected admin routes
-
-Backend (Node.js + Express)
-
-Modular, clean architecture
-
-Prisma ORM connected with PostgreSQL
-
-REST API for posts and categories
-
-Authentication + admin authorization
-
-Cloudinary media support
-
-Pagination, sorting, category filtering
-
-📁 Folder Structure
-Frontend — /client
-app/
-│── page.js                      # Home page
-│
-├── components/
-│   ├── layout/                  # Navbar / Footer / Posts UI
-│   ├── home/                    # Hero / Latest / Category UI
-│   └── ...
-│
-├── (site)/
-│   ├── posts/[slug]/page.js     # Single post page
-│   └── category/[id]/page.js    # Category with pagination
-│
-└── admin/
-    ├── posts/ (CRUD pages)
-    ├── categories/
-    └── components/              # AdminNavbar, AdminSidebar etc.
-
-Backend — /server
-controllers/
-│── postController.js
-│── categoryController.js
-│── authController.js
-
-middlewares/
-│── authMiddleware.js
-│── adminMiddleware.js
-
-routes/
-│── postRoutes.js
-│── categoryRoutes.js
-│── authRoutes.js
-
-prisma/
-│── schema.prisma
-
-utils/
-│── jwt.js
-│── cloudinary.js
-
-🧩 Key Features
-🌐 Public Website
-
-Stunning infrastructure-themed design
-
-Hero carousel slider
-
-Latest posts from each category
-
-Category-wise posts browsing
-
-Pagination on category pages
-
-Fast-loading UI
-
-SEO-friendly post URLs (slug-based)
-
-Related posts section
-
-🔐 Authentication
-
-JWT-based secure login
-
-Admin-only protected API routes
-
-Auto token expiration
-
-🛠️ Admin Dashboard
-
-Create, edit, delete posts
-
-Create and delete categories
-
-Upload thumbnail + gallery images to Cloudinary
-
-Rich text post content
-
-Auto-generated slugs
-
-Category selection dropdown
-
-☁️ Cloudinary Support
-
-Thumbnail upload
-
-Gallery upload
-
-Live preview
-
-Loading animations
-
-🗃️ Database + Prisma
-
-PostgreSQL powered
-
-Prisma ORM
-
-Clean schema for:
-
-User
-
-Category
-
-Post
-
-Pagination + sorting + filtering implemented
-
-🔌 API Endpoints
-Categories
-POST    /api/categories               (admin)
-GET     /api/categories
-GET     /api/categories/:id
-DELETE  /api/categories/:id          (admin)
-
-Posts
-POST    /api/posts                    (admin)
-GET     /api/posts
-GET     /api/posts/latest-per-category
-GET     /api/posts/id/:id
-GET     /api/posts/:slug
-PUT     /api/posts/:id               (admin)
-DELETE  /api/posts/:id               (admin)
-
-🛠️ Tech Stack
-Frontend
-
-Next.js 14 (App Router)
-
-React
-
-TailwindCSS
-
-Cloudinary Upload API
-
-Backend
-
-Node.js
-
-Express.js
-
-Prisma ORM
-
-PostgreSQL
-
-JSON Web Tokens (JWT)
-
-Dev Tools
-
-Vercel / Render for deployment
-
-ESLint + Prettier
-
-Postman for API testing
-
-⚙️ Environment Variables
-Frontend
-NEXT_PUBLIC_BACKEND_URL=http://localhost:4004
-NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=xxxx
-NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=xxxx
-
-Backend
-DATABASE_URL=postgresql://...
-SECRET_KEY=your-jwt-secret-key
-
-CLOUDINARY_CLOUD_NAME=xxxx
-CLOUDINARY_API_KEY=xxxx
-CLOUDINARY_API_SECRET=xxxx
-
-▶️ Running the Project Locally
-1. Install dependencies
-
-Frontend:
-
-cd client
-npm install
-
-
-Backend:
-
-cd server
-npm install
-
-2. Configure Environment Variables
-
-Create .env in both client and server folders
-(Add the variables shown above)
-
-3. Run Backend
-cd server
-npx prisma migrate dev
-npm run dev
-
-4. Run Frontend
-cd client
-npm run dev
-
-🎨 Screenshots
-
-(Add after deployment)
-
-🚢 Deployment
-
-Frontend → Vercel
-Backend → Render / Railway
-Database → PostgreSQL
-
-👨‍💻 Author
-
-Varun Udata
-Full-Stack Developer | Rishihood University
-Tech: Web Dev · Python · React · Node · Prisma · Cloudinary
-
-⭐ Like the Project?
-
-If you found it useful, star the repository! ⭐
+# A6News - Frontend
+
+This is the frontend application for **A6News**, a modern news portal and Content Management System (CMS). Built with the Next.js App Router, it provides a fast, server-side rendered, and SEO-friendly public interface for reading news, alongside a secure administrative dashboard for managing content.
+
+🔗 **[Backend Repository](<REPLACE_WITH_BACKEND_REPO_URL>)**
+
+## ✨ Features
+
+- **Public News Site:**
+  - Modern, responsive homepage with Hero, Latest News, and Category sections.
+  - Category-based article browsing.
+  - Detailed article pages supporting thumbnails, image galleries, tags, and view counters.
+- **Admin Dashboard:**
+  - Secure, JWT-based authentication system.
+  - Manage articles (Create, Edit, Delete) with Draft/Published states.
+  - Manage categories and user accounts.
+- **UI & UX:**
+  - Fully responsive design using Tailwind CSS v4.
+  - Interactive notifications with React Toastify.
+  - Beautiful, accessible icons using Lucide React.
+
+## 🛠️ Technology Stack
+
+- **Framework:** [Next.js 15](https://nextjs.org/) (App Router)
+- **Library:** [React 19](https://react.dev/)
+- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
+- **Icons:** [Lucide React](https://lucide.dev/)
+- **Notifications:** [React Toastify](https://fkhadra.github.io/react-toastify/)
+
+## 📁 Directory Structure
+
+```text
+client/
+├── app/
+│   ├── (auth)/         # Login & Registration pages
+│   ├── (site)/         # Public pages (Categories, Posts)
+│   ├── admin/          # Protected Admin Dashboard
+│   ├── components/     # Reusable React components
+│   ├── globals.css     # Global styling
+│   └── layout.js       # Root layout component
+├── public/             # Static assets
+└── package.json        # Dependencies and scripts
+```
+
+## 🚦 Getting Started
+
+### Prerequisites
+
+- Node.js (v18.x or newer recommended)
+- npm, yarn, or pnpm
+- The A6News Backend server running locally.
+
+### Installation
+
+1. Clone the repository and navigate to the project directory:
+   ```bash
+   git clone <REPLACE_WITH_FRONTEND_REPO_URL>
+   cd client
+   ```
+
+2. Install the dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env.local` file in the root of the project to configure your environment variables:
+   ```bash
+   touch .env.local
+   ```
+   Add the following variables:
+   ```env
+   # Replace with your backend API URL if different
+   NEXT_PUBLIC_API_URL="http://localhost:4004/api"
+   ```
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.

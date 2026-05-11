@@ -1,1 +1,21 @@
-@import "tailwindcss"; 
+@import "tailwindcss";
+
+@theme {
+  --color-brand-red: #e50000;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-white text-gray-900;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer utilities {
+  .shadow-premium {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  }
+}
