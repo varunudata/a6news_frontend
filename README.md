@@ -2,7 +2,7 @@
 
 This is the frontend application for **A6News**, a modern news portal and Content Management System (CMS). Built with the Next.js App Router, it provides a fast, server-side rendered, and SEO-friendly public interface for reading news, alongside a secure administrative dashboard for managing content.
 
-🔗 **[Backend Repository](<REPLACE_WITH_BACKEND_REPO_URL>)**
+🔗 **[Backend Repository](https://github.com/varunudata/a6news_backend.git)**
 
 ## ✨ Features
 
