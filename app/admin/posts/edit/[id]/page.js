@@ -35,7 +35,9 @@ export default function EditPostPage({ params }) {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch(`${backendUrl}/api/categories`);
+        const res = await fetch(`${backendUrl}/api/categories`, {
+          cache: "no-store",
+        });
         const data = await res.json();
         if (data.success) setCategories(data.data);
       } catch (err) {

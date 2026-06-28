@@ -40,53 +40,50 @@ export default function Navbar() {
           {/* Actions & Socials Section */}
           <div className="flex items-center gap-4 lg:gap-6">
             
-            {/* Social Icons - Hidden on very small screens for cleaner look */}
+            {/* Social Icons */}
             <div className="hidden sm:flex items-center gap-3">
               <a
                 href="https://www.youtube.com/@a6newsinfra"
                 target="_blank"
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 text-gray-500 border border-gray-100 shadow-sm transition-all duration-300 hover:bg-[#FF0000] hover:text-white hover:-translate-y-1 hover:shadow-md"
+                className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 text-gray-500 hover:text-[#FF0000] hover:border-[#FF0000] transition-colors"
               >
                 <Youtube className="w-5 h-5" />
               </a>
               <a
                 href="https://x.com/A6NewsTelugu?t=CLS91x4_28ro0cjprwyD9Q&s=08"
                 target="_blank"
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 text-gray-500 border border-gray-100 shadow-sm transition-all duration-300 hover:bg-[#1DA1F2] hover:text-white hover:-translate-y-1 hover:shadow-md"
+                className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 text-gray-500 hover:text-[#1DA1F2] hover:border-[#1DA1F2] transition-colors"
               >
                 <Twitter className="w-5 h-5" />
               </a>
               <a
                 href="https://www.facebook.com/share/16cLcBDyEh/"
                 target="_blank"
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 text-gray-500 border border-gray-100 shadow-sm transition-all duration-300 hover:bg-[#1877F2] hover:text-white hover:-translate-y-1 hover:shadow-md"
+                className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 text-gray-500 hover:text-[#1877F2] hover:border-[#1877F2] transition-colors"
               >
                 <Facebook className="w-5 h-5" />
               </a>
               <a
                 href="https://www.instagram.com/a6newsinfra?igsh=MW5zcGRjYWMxcDAwMg=="
                 target="_blank"
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 text-gray-500 border border-gray-100 shadow-sm transition-all duration-300 hover:bg-linear-to-tr from-pink-500 via-red-500 to-yellow-500 hover:text-white hover:-translate-y-1 hover:shadow-md"
+                className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 text-gray-500 hover:text-pink-600 hover:border-pink-600 transition-colors"
               >
                 <Instagram className="w-5 h-5" />
               </a>
             </div>
 
-            {/* Divider */}
-            <div className="hidden sm:block h-8 w-px bg-gray-200"></div>
-
             {/* Auth Buttons */}
             {isLoggedIn ? (
               <button
                 onClick={handleLogout}
-                className="bg-white text-gray-700 border border-gray-200 shadow-sm px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-gray-50 hover:shadow transition-all cursor-pointer"
+                className="bg-[#E50000] text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-red-700 transition-all cursor-pointer"
               >
                 Logout
               </button>
             ) : (
               <button
                 onClick={() => router.push("/login")}
-                className="bg-red-600 text-white shadow-md shadow-red-600/20 px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-red-700 hover:shadow-lg hover:shadow-red-600/30 transition-all cursor-pointer"
+                className="bg-[#E50000] text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-red-700 transition-all cursor-pointer"
               >
                 Login
               </button>

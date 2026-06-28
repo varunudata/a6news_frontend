@@ -21,7 +21,9 @@ export default function CategoriesPage() {
     }
     try {
       setLoading(true);
-      const res = await fetch(`${backendUrl}/api/categories`);
+      const res = await fetch(`${backendUrl}/api/categories`, {
+        cache: "no-store",
+      });
       const data = await res.json();
       if (data.success) {
         setCategories(data.data || []);

@@ -61,7 +61,9 @@ export default function CreatePostsPage() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch(`${backendUrl}/api/categories`);
+        const res = await fetch(`${backendUrl}/api/categories`, {
+          cache: "no-store",
+        });
         const data = await res.json();
         if (data.success) {
           setCategories(data.data);
