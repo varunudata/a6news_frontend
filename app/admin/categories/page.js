@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Plus, Trash2, X } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 
@@ -14,7 +14,7 @@ export default function CategoriesPage() {
 
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     if (!backendUrl) {
       toast.error("Backend Url is not configured");
       return;
@@ -36,11 +36,11 @@ export default function CategoriesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [backendUrl]);
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+  }, [fetchCategories]);
 
   const handleAdd = async () => {
     const name = newCategoryName.trim();

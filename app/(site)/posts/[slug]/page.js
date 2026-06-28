@@ -51,7 +51,7 @@ export default function SinglePostPage() {
       }
     };
     fetchPost();
-  }, [slug]);
+  }, [slug, backendUrl]);
 
   if (loading) {
     return (
@@ -89,6 +89,7 @@ export default function SinglePostPage() {
         </div>
         {post.thumbnail && (
           <div className="my-6 max-w-4xl mx-auto rounded-xl overflow-hidden shadow">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={post.thumbnail}
               alt={post.title}
@@ -105,9 +106,11 @@ export default function SinglePostPage() {
           {post.gallery?.length > 0 && (
             <div className="mt-8 grid grid-cols-2 md:grid-cols-3 gap-4">
               {post.gallery.map((img, i) => (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   key={i}
                   src={img}
+                  alt={`Gallery image ${i + 1}`}
                   className="rounded-lg w-full h-40 object-cover shadow"
                 />
               ))}
@@ -129,6 +132,7 @@ export default function SinglePostPage() {
                   className="bg-white rounded-xl border shadow hover:shadow-lg transition overflow-hidden"
                 >
                   {r.thumbnail && (
+                    /* eslint-disable-next-line @next/next/no-img-element */
                     <img
                       src={r.thumbnail}
                       alt={r.title}

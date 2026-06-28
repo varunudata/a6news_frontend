@@ -45,7 +45,7 @@ export default function EditPostPage({ params }) {
       }
     };
     fetchCategories();
-  }, []);
+  }, [backendUrl]);
 
   useEffect(() => {
     if (!postId) return;
@@ -76,7 +76,7 @@ export default function EditPostPage({ params }) {
     };
 
     fetchPost();
-  }, [postId]);
+  }, [postId, backendUrl]);
 
   const handleThumbnailUpload = async (e) => {
     const file = e.target.files[0];
@@ -256,7 +256,8 @@ export default function EditPostPage({ params }) {
 
           {thumbnail && (
             <div className="mt-3 relative w-40">
-              <img src={thumbnail} className="rounded-lg border" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={thumbnail} alt="Thumbnail preview" className="rounded-lg border" />
               <button
                 className="absolute top-1 right-1 bg-black/50 text-white p-1 rounded"
                 onClick={() => setThumbnail(null)}
@@ -295,12 +296,14 @@ export default function EditPostPage({ params }) {
           <div className="grid grid-cols-4 gap-3 mt-3">
             {gallery.map((img, index) => (
               <div className="relative" key={index}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={img}
+                  alt={`Gallery preview ${index + 1}`}
                   className="h-24 w-full rounded-lg border object-cover"
                 />
                 <button
-                  className="absolute top-1 right-1 bg-black/60 text-white p-1 rounded"
+                  className="absolute top-1 right-1 bg-black/60 text-white p-1 rounded cursor-pointer"
                   onClick={() =>
                     setGallery(gallery.filter((_, i) => i !== index))
                   }

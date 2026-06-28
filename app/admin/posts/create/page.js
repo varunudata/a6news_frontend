@@ -73,7 +73,7 @@ export default function CreatePostsPage() {
       }
     };
     fetchCategories();
-  }, []);
+  }, [backendUrl]);
 
   const handlePublish = async () => {
     if (!title || !content || !categoryId || !thumbnail) {
@@ -206,7 +206,8 @@ export default function CreatePostsPage() {
           </div>
           {thumbnail && (
             <div className="mt-3 relative w-40">
-              <img src={thumbnail} className="rounded-lg border" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={thumbnail} alt="Thumbnail preview" className="rounded-lg border" />
               <button
                 className="absolute top-1 right-1 bg-black/50 text-white p-1 rounded cursor-pointer"
                 onClick={() => setThumbnail(null)}
@@ -246,8 +247,10 @@ export default function CreatePostsPage() {
             <div className="mt-3 grid grid-cols-4 gap-3">
               {gallery.map((img, i) => (
                 <div key={i} className="relative">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={img}
+                    alt={`Gallery preview ${i + 1}`}
                     className="rounded-lg border h-24 w-full object-cover"
                   />
                   <button

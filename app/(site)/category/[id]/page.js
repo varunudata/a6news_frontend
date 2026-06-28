@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import NavContents from "../../../components/layout/NavContents";
 
@@ -20,7 +20,7 @@ export default function CategoryPage() {
 
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async (page = 1, sortValue = sort) => {
+  const fetchData = useCallback(async (page = 1, sortValue = sort) => {
     if (!categoryId || categoryId === "undefined") return;
     try {
       const res = await fetch(
@@ -45,14 +45,14 @@ export default function CategoryPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [categoryId, backendUrl, sort]);
 
   useEffect(() => {
     if (!categoryId || categoryId === "undefined") return;
 
     setLoading(true);
     fetchData(1, sort);
-  }, [categoryId, sort]);
+  }, [categoryId, sort, fetchData]);
 
   const handlePageChange = (pg) => {
     if (pg >= 1 && pg <= pagination.totalPages) {
@@ -91,6 +91,7 @@ export default function CategoryPage() {
                   className="shadow rounded-lg overflow-hidden bg-white"
                 >
                   {post.thumbnail && (
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={post.thumbnail}
                       alt={post.title}
