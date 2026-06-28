@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { Loader, Upload, X } from "lucide-react";
@@ -206,7 +207,6 @@ export default function CreatePostsPage() {
           </div>
           {thumbnail && (
             <div className="mt-3 relative w-40">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={thumbnail} alt="Thumbnail preview" className="rounded-lg border" />
               <button
                 className="absolute top-1 right-1 bg-black/50 text-white p-1 rounded cursor-pointer"
@@ -247,7 +247,6 @@ export default function CreatePostsPage() {
             <div className="mt-3 grid grid-cols-4 gap-3">
               {gallery.map((img, i) => (
                 <div key={i} className="relative">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={img}
                     alt={`Gallery preview ${i + 1}`}

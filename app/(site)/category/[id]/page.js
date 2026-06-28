@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
@@ -91,7 +92,6 @@ export default function CategoryPage() {
                   className="shadow rounded-lg overflow-hidden bg-white"
                 >
                   {post.thumbnail && (
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={post.thumbnail}
                       alt={post.title}

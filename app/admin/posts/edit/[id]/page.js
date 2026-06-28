@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -256,7 +257,6 @@ export default function EditPostPage({ params }) {
 
           {thumbnail && (
             <div className="mt-3 relative w-40">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={thumbnail} alt="Thumbnail preview" className="rounded-lg border" />
               <button
                 className="absolute top-1 right-1 bg-black/50 text-white p-1 rounded"
@@ -296,7 +296,6 @@ export default function EditPostPage({ params }) {
           <div className="grid grid-cols-4 gap-3 mt-3">
             {gallery.map((img, index) => (
               <div className="relative" key={index}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={img}
                   alt={`Gallery preview ${index + 1}`}

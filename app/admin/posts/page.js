@@ -1,6 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Trash2, Pencil, X } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -14,7 +15,7 @@ export default function AllPostsPage() {
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const router = useRouter();
 
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     try {
       setLoading(true);
       const res = await fetch(`${backendUrl}/api/posts`);
@@ -30,11 +31,11 @@ export default function AllPostsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [backendUrl]);
 
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [fetchPosts]);
 
   const handleDelete = async () => {
     const token = localStorage.getItem("token");
@@ -110,6 +111,7 @@ export default function AllPostsPage() {
                   <td className="py-3 px-4">
                     <img
                       src={post.thumbnail}
+                      alt={post.title}
                       className="h-14 w-20 object-cover rounded border"
                     />
                   </td>
