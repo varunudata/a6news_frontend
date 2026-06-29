@@ -4,6 +4,8 @@ import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { isTokenExpired } from "../../../utils/auth";
+
 export default function Navbar() {
   const logo =
     "https://res.cloudinary.com/dkdidynja/image/upload/v1760958996/logo_slyy7t.png";
@@ -12,11 +14,17 @@ export default function Navbar() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
-  },[]);
+    if (token && isTokenExpired(token)) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      setIsLoggedIn(false);
+    } else {
+      setIsLoggedIn(!!token);
+    }
+  }, []);
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("role")
+    localStorage.removeItem("role");
     setIsLoggedIn(false);
     router.push("/login");
   };

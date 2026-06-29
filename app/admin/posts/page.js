@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Trash2, Pencil, X } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { isTokenExpired } from "../../../utils/auth";
 
 export default function AllPostsPage() {
   const [posts, setPosts] = useState([]);
@@ -39,6 +40,15 @@ export default function AllPostsPage() {
 
   const handleDelete = async () => {
     const token = localStorage.getItem("token");
+    if (!token || isTokenExpired(token)) {
+      toast.error("Session expired. Please log in again.");
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
+      return;
+    }
     try {
       const res = await fetch(`${backendUrl}/api/posts/${deleteId}`, {
         method: "DELETE",

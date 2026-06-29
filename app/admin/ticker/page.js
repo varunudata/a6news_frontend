@@ -3,8 +3,11 @@
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { Save, RefreshCw } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { isTokenExpired } from "../../../utils/auth";
 
 export default function TickerPage() {
+  const router = useRouter();
   const [text, setText] = useState("");
   const [originalText, setOriginalText] = useState("");
   const [loading, setLoading] = useState(true);
@@ -37,8 +40,17 @@ export default function TickerPage() {
       toast.error("Ticker text cannot be empty");
       return;
     }
-    setSaving(true);
     const token = localStorage.getItem("token");
+    if (!token || isTokenExpired(token)) {
+      toast.error("Session expired. Please log in again.");
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
+      return;
+    }
+    setSaving(true);
     try {
       const res = await fetch(`${backendUrl}/api/ticker`, {
         method: "PUT",

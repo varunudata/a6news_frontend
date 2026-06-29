@@ -6,6 +6,7 @@ import { Upload, X, Loader } from "lucide-react";
 import { uploadToCloudinary } from "../../../../../utils/uploadToCloudinary";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { isTokenExpired } from "../../../../../utils/auth";
 
 export default function EditPostPage({ params }) {
   const [postId, setPostId] = useState(null);
@@ -121,8 +122,17 @@ export default function EditPostPage({ params }) {
       return;
     }
 
-    setUpdating(true);
     const token = localStorage.getItem("token");
+    if (!token || isTokenExpired(token)) {
+      toast.error("Session expired. Please log in again.");
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
+      return;
+    }
+    setUpdating(true);
 
     try {
       const res = await fetch(`${backendUrl}/api/posts/${postId}`, {

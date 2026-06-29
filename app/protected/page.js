@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { isTokenExpired } from "../../utils/auth";
+
 export default function ProtectedPage() {
   const [message, setMessage] = useState("");
   const router = useRouter();
@@ -13,8 +15,10 @@ export default function ProtectedPage() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    if (!token) {
-      toast.error("You must log in first");
+    if (!token || isTokenExpired(token)) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      toast.error("You must log in first / Session expired");
       router.push("/login");
       return;
     }

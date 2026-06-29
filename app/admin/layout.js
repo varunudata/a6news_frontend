@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import AdminSidebar from "./components/AdminSidebar";
 import AdminNavbar from "./components/AdminNavbar";
 
+import { isTokenExpired } from "../../utils/auth";
+
 export default function AdminLayout({ children }) {
   const router = useRouter();
   const [checking, setChecking] = useState(true);
@@ -12,7 +14,9 @@ export default function AdminLayout({ children }) {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
-    if (!token) {
+    if (!token || isTokenExpired(token)) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
       router.replace("/login");
       return;
     }

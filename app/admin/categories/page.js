@@ -3,8 +3,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { Plus, Trash2, X } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { isTokenExpired } from "../../../utils/auth";
 
 export default function CategoriesPage() {
+  const router = useRouter();
   const [categories, setCategories] = useState([]);
   const [search, setSearch] = useState("");
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -53,8 +56,13 @@ export default function CategoriesPage() {
       return;
     }
     const token = localStorage.getItem("token");
-    if (!token) {
-      toast.error("You must be logged in ");
+    if (!token || isTokenExpired(token)) {
+      toast.error("Session expired. Please log in again.");
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
       return;
     }
     try {
@@ -87,8 +95,13 @@ export default function CategoriesPage() {
       return;
     }
     const token = localStorage.getItem("token");
-    if (!token) {
-      toast.error("You must be logged in");
+    if (!token || isTokenExpired(token)) {
+      toast.error("Session expired. Please log in again.");
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
       return;
     }
     try {

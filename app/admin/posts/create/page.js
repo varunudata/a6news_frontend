@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { uploadToCloudinary } from "../../../../utils/uploadToCloudinary.js";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { isTokenExpired } from "../../../../utils/auth";
 
 export default function CreatePostsPage() {
   const [title, setTitle] = useState("");
@@ -81,8 +82,17 @@ export default function CreatePostsPage() {
       toast.error("Please fill all required fields");
       return;
     }
-    setPublishing(true);
     const token = localStorage.getItem("token");
+    if (!token || isTokenExpired(token)) {
+      toast.error("Session expired. Please log in again.");
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
+      return;
+    }
+    setPublishing(true);
     try {
       const res = await fetch(`${backendUrl}/api/posts`, {
         method: "POST",
