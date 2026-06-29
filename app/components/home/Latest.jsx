@@ -1,4 +1,28 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 export default function Latest() {
+  const [tickerText, setTickerText] = useState(
+    "Breaking: New Tech Regulations Announced • AI is reshaping content creation • Stock markets open higher today • More updates coming soon..."
+  );
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+  useEffect(() => {
+    const fetchTicker = async () => {
+      try {
+        const res = await fetch(`${backendUrl}/api/ticker`);
+        const data = await res.json();
+        if (data.success && data.data && data.data.text) {
+          setTickerText(data.data.text);
+        }
+      } catch (error) {
+        console.error("Error loading ticker updates:", error);
+      }
+    };
+    fetchTicker();
+  }, [backendUrl]);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-5 select-none">
       <div className="flex items-center w-full bg-[#FFEBEB] rounded-md overflow-hidden relative border border-red-100">
@@ -13,7 +37,7 @@ export default function Latest() {
         {/* Ticker Content */}
         <div className="relative flex-1 h-full overflow-hidden flex items-center pl-6">
           <div className="animate-marquee whitespace-nowrap text-[#E50000] font-medium text-xs sm:text-sm py-2.5">
-            Breaking: New Tech Regulations Announced • AI is reshaping content creation • Stock markets open higher today • More updates coming soon...
+            {tickerText}
           </div>
         </div>
         

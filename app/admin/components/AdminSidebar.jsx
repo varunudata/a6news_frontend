@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, FileText, FolderKanban, Users } from "lucide-react";
+import { LayoutDashboard, FileText, FolderKanban, Users, Megaphone } from "lucide-react";
 
 export default function AdminSidebar() {
   const pathname = usePathname();
@@ -16,6 +16,7 @@ export default function AdminSidebar() {
     { label: "Dashboard", href: "/admin", icon: <LayoutDashboard size={18} /> },
     { label: "Posts", href: "/admin/posts", icon: <FileText size={18} /> },
     { label: "Categories", href: "/admin/categories", icon: <FolderKanban size={18} /> },
+    { label: "Ticker", href: "/admin/ticker", icon: <Megaphone size={18} /> },
     { label: "Users", href: "/admin/users", icon: <Users size={18} /> },
   ];
 
