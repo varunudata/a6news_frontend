@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { Plus, Trash2, X } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { GripVertical, Plus, Save, Trash2, X } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { isTokenExpired } from "../../../utils/auth";
@@ -14,6 +14,12 @@ export default function CategoriesPage() {
   const [newCategoryName, setNewCategoryName] = useState("");
   const [loading, setLoading] = useState(false);
   const [deleteLoadingId, setDeleteLoadingId] = useState(null);
+  const [savingOrder, setSavingOrder] = useState(false);
+  const [orderChanged, setOrderChanged] = useState(false);
+
+  // Drag-and-drop state
+  const dragItem = useRef(null);
+  const dragOverItem = useRef(null);
 
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -30,6 +36,7 @@ export default function CategoriesPage() {
       const data = await res.json();
       if (data.success) {
         setCategories(data.data || []);
+        setOrderChanged(false);
       } else {
         toast.error(data.message || "Failed to load categories");
       }
@@ -127,9 +134,76 @@ export default function CategoriesPage() {
     }
   };
 
-  const filteredCategories = categories.filter((cat) =>
-    cat.name.toLowerCase().includes(search.toLowerCase())
-  );
+  // --- Drag & Drop handlers (only used when search is empty) ---
+  const handleDragStart = (index) => {
+    dragItem.current = index;
+  };
+
+  const handleDragEnter = (index) => {
+    dragOverItem.current = index;
+    // Visual reorder in real-time
+    if (dragItem.current === null || dragItem.current === index) return;
+    setCategories((prev) => {
+      const updated = [...prev];
+      const [moved] = updated.splice(dragItem.current, 1);
+      updated.splice(index, 0, moved);
+      dragItem.current = index;
+      return updated;
+    });
+  };
+
+  const handleDragEnd = () => {
+    dragItem.current = null;
+    dragOverItem.current = null;
+    setOrderChanged(true);
+  };
+
+  const handleSaveOrder = async () => {
+    const token = localStorage.getItem("token");
+    if (!token || isTokenExpired(token)) {
+      toast.error("Session expired. Please log in again.");
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
+      return;
+    }
+    setSavingOrder(true);
+    try {
+      const order = categories.map((cat, index) => ({
+        id: cat.id,
+        sortOrder: index,
+      }));
+      const res = await fetch(`${backendUrl}/api/categories/reorder`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ order }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success("Category order saved! Changes are live on the website.");
+        setOrderChanged(false);
+      } else {
+        toast.error(data.message || "Failed to save order");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Server error while saving order");
+    } finally {
+      setSavingOrder(false);
+    }
+  };
+
+  const isSearching = search.trim().length > 0;
+  const filteredCategories = isSearching
+    ? categories.filter((cat) =>
+        cat.name.toLowerCase().includes(search.toLowerCase())
+      )
+    : categories;
 
   return (
     <div className="max-w-3xl">
@@ -143,13 +217,25 @@ export default function CategoriesPage() {
           </p>
         </div>
 
-        <button
-          onClick={() => setIsAddOpen(true)}
-          className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
-        >
-          <Plus size={18} />
-          Add Category
-        </button>
+        <div className="flex items-center gap-3">
+          {orderChanged && !isSearching && (
+            <button
+              onClick={handleSaveOrder}
+              disabled={savingOrder}
+              className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition disabled:opacity-60"
+            >
+              <Save size={16} />
+              {savingOrder ? "Saving..." : "Save Order"}
+            </button>
+          )}
+          <button
+            onClick={() => setIsAddOpen(true)}
+            className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+          >
+            <Plus size={18} />
+            Add Category
+          </button>
+        </div>
       </div>
 
       <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
@@ -161,29 +247,54 @@ export default function CategoriesPage() {
           className="w-full px-3 py-2 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
         />
 
+        {!isSearching && (
+          <p className="text-xs text-gray-400 mb-3 flex items-center gap-1">
+            <GripVertical size={13} />
+            Drag rows to reorder — changes appear on the website navbar after
+            saving.
+          </p>
+        )}
+
         {loading ? (
           <div className="text-gray-500 text-sm">Loading...</div>
         ) : filteredCategories.length === 0 ? (
           <div className="text-gray-500 text-sm">No categories found</div>
         ) : (
           <ul className="space-y-2">
-            {filteredCategories.map((cat) => (
+            {filteredCategories.map((cat, index) => (
               <li
                 key={cat.id}
-                className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition"
+                draggable={!isSearching}
+                onDragStart={() => handleDragStart(index)}
+                onDragEnter={() => handleDragEnter(index)}
+                onDragEnd={handleDragEnd}
+                onDragOver={(e) => e.preventDefault()}
+                className={`flex items-center justify-between p-3 border rounded-lg transition select-none ${
+                  !isSearching
+                    ? "cursor-grab active:cursor-grabbing hover:bg-gray-50 active:opacity-60 active:scale-[0.99] active:shadow-md"
+                    : "hover:bg-gray-50"
+                }`}
               >
-                <div>
-                  <div className="font-medium">{cat.name}</div>
-                  {cat.createdAt && (
-                    <div className="text-xs text-gray-500">
-                      Created: {new Date(cat.createdAt).toLocaleString()}
-                    </div>
+                <div className="flex items-center gap-3">
+                  {!isSearching && (
+                    <GripVertical
+                      size={18}
+                      className="text-gray-300 shrink-0"
+                    />
                   )}
+                  <div>
+                    <div className="font-medium">{cat.name}</div>
+                    {cat.createdAt && (
+                      <div className="text-xs text-gray-500">
+                        Created: {new Date(cat.createdAt).toLocaleString()}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <button
                   onClick={() => handleDelete(cat.id)}
-                  className="flex items-center gap-1 text-red-600 hover:text-red-700 text-sm"
+                  className="flex items-center gap-1 text-red-600 hover:text-red-700 text-sm shrink-0"
                   disabled={deleteLoadingId === cat.id}
                 >
                   <Trash2 size={16} />
@@ -211,6 +322,7 @@ export default function CategoriesPage() {
               type="text"
               value={newCategoryName}
               onChange={(e) => setNewCategoryName(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleAdd()}
               placeholder="Category name..."
               className="w-full px-3 py-2 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-red-500"
             />

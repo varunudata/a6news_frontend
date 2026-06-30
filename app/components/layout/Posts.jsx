@@ -87,7 +87,15 @@ export default function Posts() {
                 href={`/posts/${post.slug}`}
                 className="group bg-white rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 hover:shadow-premium hover:-translate-y-1 transition-all duration-300 flex flex-col"
               >
+                {/* Category Badge */}
+                <div className="p-2">
+                  <span className="inline-block bg-red-600 text-white text-xs font-bold uppercase tracking-wider px-2 py-1 rounded-full shadow-sm ">
+                    {post.category}
+                  </span>
+                </div>
+
                 {/* Thumbnail */}
+
                 <div className="relative h-56 overflow-hidden bg-gray-100">
                   {post.thumbnail ? (
                     <img
@@ -100,11 +108,6 @@ export default function Posts() {
                       No Image Available
                     </div>
                   )}
-
-                  {/* Category Badge */}
-                  <span className="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-md">
-                    {post.category}
-                  </span>
                 </div>
 
                 {/* Content */}
@@ -121,7 +124,7 @@ export default function Posts() {
                   </p>
 
                   <div className="mt-auto pt-5 flex items-center text-red-600 font-semibold text-xs sm:text-sm uppercase tracking-wide">
-                    Read article 
+                    Read article
                     <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </div>
                 </div>

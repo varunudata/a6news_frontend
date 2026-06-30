@@ -89,16 +89,23 @@ export default function CategoryPage() {
               {posts.map((post) => (
                 <div
                   key={post.id}
-                  className="shadow rounded-lg overflow-hidden bg-white"
+                  className="shadow rounded-lg overflow-hidden bg-white flex flex-col"
                 >
-                  {post.thumbnail && (
-                    <img
-                      src={post.thumbnail}
-                      alt={post.title}
-                      className="h-48 w-full object-cover"
-                    />
-                  )}
-                  <div className="p-4">
+                  {/* Thumbnail container — fixed height so image never gets cropped */}
+                  <div className="w-full h-48 overflow-hidden bg-gray-100 flex-shrink-0">
+                    {post.thumbnail ? (
+                      <img
+                        src={post.thumbnail}
+                        alt={post.title}
+                        className="w-full h-full object-cover object-top"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
+                        No Image
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-4 flex flex-col flex-1">
                     <h3 className="font-bold text-lg">{post.title}</h3>
                     <p className="text-sm text-gray-600 mt-2 line-clamp-3">
                       {post.subtitle || post.content.slice(0, 100)}

@@ -89,11 +89,11 @@ export default function SinglePostPage() {
           </div>
         </div>
         {post.thumbnail && (
-          <div className="my-6 max-w-4xl mx-auto rounded-xl overflow-hidden shadow">
+          <div className="my-6 max-w-4xl mx-auto rounded-xl shadow">
             <img
               src={post.thumbnail}
               alt={post.title}
-              className="w-full object-cover max-h-[450px]"
+              className="w-full h-auto rounded-xl"
             />
           </div>
         )}

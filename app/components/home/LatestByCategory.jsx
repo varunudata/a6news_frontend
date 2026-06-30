@@ -12,6 +12,7 @@ export default function LatestByCategory({ data }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
         {data.map((item) => (
+
           <Link
             key={item.id}
             href={`/posts/${item.slug}`}
@@ -23,7 +24,6 @@ export default function LatestByCategory({ data }) {
               alt={item.title}
               className="h-40 w-full object-cover"
             />
-
             {/* Content */}
             <div className="p-4">
               <span className="text-xs bg-red-600 text-white px-2 py-1 rounded">
