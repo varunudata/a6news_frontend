@@ -8,7 +8,7 @@ import { isTokenExpired } from "../../../utils/auth";
 
 export default function Navbar() {
   const logo =
-    "https://res.cloudinary.com/dkdidynja/image/upload/v1760958996/logo_slyy7t.png";
+    "https://res.cloudinary.com/dkdidynja/image/upload/v1784568115/a6newsinfra_irdltr.png";
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -31,7 +31,7 @@ export default function Navbar() {
   return (
     <header className="w-full bg-white relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-24">
+        <div className="flex items-center justify-between h-16 sm:h-20">
           
           {/* Logo Section */}
           <div 
@@ -41,7 +41,7 @@ export default function Navbar() {
             <img 
               src={logo} 
               alt="A6News Logo" 
-              className="h-14 sm:h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.02]" 
+              className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.02]" 
             />
           </div>
 

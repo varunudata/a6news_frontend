@@ -37,7 +37,15 @@ export default function Latest() {
         {/* Ticker Content */}
         <div className="relative flex-1 h-full overflow-hidden flex items-center pl-6">
           <div className="animate-marquee whitespace-nowrap text-[#E50000] font-medium text-xs sm:text-sm py-2.5">
-            {tickerText}
+            {tickerText.split('•').map((item, index, array) => (
+              <span key={index}>
+                {item}
+                {index < array.length - 1 && (
+                  <span className="mx-8 text-red-300 font-bold">•</span>
+                )}
+              </span>
+            ))}
+            <span className="pr-16"></span>
           </div>
         </div>
         

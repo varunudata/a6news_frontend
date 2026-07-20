@@ -2,17 +2,17 @@
 import { useEffect, useRef, useState } from "react";
 
 const img0 =
-  "https://res.cloudinary.com/dkdidynja/image/upload/v1760958811/slide0_kqjow7.jpg";
+  "https://res.cloudinary.com/dkdidynja/image/upload/q_auto,f_auto,e_improve/v1760958811/slide0_kqjow7.jpg";
 const img1 =
-  "https://res.cloudinary.com/dkdidynja/image/upload/v1760958843/slide1_an557s.jpg";
+  "https://res.cloudinary.com/dkdidynja/image/upload/q_auto,f_auto,e_improve/v1760958843/slide1_an557s.jpg";
 const img2 =
-  "https://res.cloudinary.com/dkdidynja/image/upload/v1760958860/slide2_l0mbwd.jpg";
+  "https://res.cloudinary.com/dkdidynja/image/upload/q_auto,f_auto,e_improve/v1760958860/slide2_l0mbwd.jpg";
 const img3 =
-  "https://res.cloudinary.com/dkdidynja/image/upload/v1760958872/slide3_lmgan7.jpg";
+  "https://res.cloudinary.com/dkdidynja/image/upload/q_auto,f_auto,e_improve/v1760958872/slide3_lmgan7.jpg";
 const img4 =
-  "https://res.cloudinary.com/dkdidynja/image/upload/v1760958887/slide4_fwphj3.jpg";
+  "https://res.cloudinary.com/dkdidynja/image/upload/q_auto,f_auto,e_improve/v1760958887/slide4_fwphj3.jpg";
 const img5 =
-  "https://res.cloudinary.com/dkdidynja/image/upload/v1760958900/slide5_xuzkzy.jpg";
+  "https://res.cloudinary.com/dkdidynja/image/upload/q_auto,f_auto,e_improve/v1760958900/slide5_xuzkzy.jpg";
 
 export default function Hero() {
   const sliderRef = useRef(null);
