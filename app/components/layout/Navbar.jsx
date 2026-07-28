@@ -4,50 +4,70 @@ import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { isTokenExpired } from "../../../utils/auth";
-
 export default function Navbar() {
   const logo =
     "https://res.cloudinary.com/dkdidynja/image/upload/v1784568115/a6newsinfra_irdltr.png";
   const router = useRouter();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const [tickerText, setTickerText] = useState("");
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token && isTokenExpired(token)) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("role");
-      setIsLoggedIn(false);
-    } else {
-      setIsLoggedIn(!!token);
-    }
-  }, []);
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    setIsLoggedIn(false);
-    router.push("/login");
-  };
+
+    // Fetch ticker
+    const fetchTicker = async () => {
+      try {
+        const res = await fetch(`${backendUrl}/api/ticker`);
+        const data = await res.json();
+        if (data.success && data.data && data.data.text) {
+          setTickerText(data.data.text);
+        }
+      } catch (error) {
+        console.error("Error loading ticker updates:", error);
+      }
+    };
+    fetchTicker();
+  }, [backendUrl]);
+
   return (
     <header className="w-full bg-white relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
-          
+        <div className="flex items-center justify-between h-16 sm:h-20 relative overflow-hidden">
+
           {/* Logo Section */}
-          <div 
-            className="flex-shrink-0 cursor-pointer group" 
+          <div
+            className="flex-shrink-0 cursor-pointer group relative z-20 bg-white h-full flex items-center pr-6"
             onClick={() => router.push('/')}
           >
-            <img 
-              src={logo} 
-              alt="A6News Logo" 
-              className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.02]" 
+            <img
+              src={logo}
+              alt="A6News Logo"
+              className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.02]"
             />
           </div>
 
+          {/* Ticker Section */}
+          {tickerText && (
+            <div className="absolute inset-0 flex items-center z-10">
+              <div className="w-full overflow-hidden">
+                <div className="animate-marquee-mobile sm:animate-marquee whitespace-nowrap text-[#E50000] font-medium text-sm">
+                  {tickerText.split('•').map((item, index, array) => (
+                    <span key={index}>
+                      {item}
+                      {index < array.length - 1 && (
+                        <span className="mx-8 text-red-300 font-bold">•</span>
+                      )}
+                    </span>
+                  ))}
+                  <span className="pr-16"></span>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Actions & Socials Section */}
-          <div className="flex items-center gap-4 lg:gap-6">
-            
+          <div className="flex items-center gap-4 lg:gap-6 relative z-20 bg-white h-full pl-6">
+
             {/* Social Icons */}
             <div className="hidden sm:flex items-center gap-3">
               <a
@@ -79,23 +99,6 @@ export default function Navbar() {
                 <Instagram className="w-5 h-5" />
               </a>
             </div>
-
-            {/* Auth Buttons */}
-            {isLoggedIn ? (
-              <button
-                onClick={handleLogout}
-                className="bg-[#E50000] text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-red-700 transition-all cursor-pointer"
-              >
-                Logout
-              </button>
-            ) : (
-              <button
-                onClick={() => router.push("/login")}
-                className="bg-[#E50000] text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-red-700 transition-all cursor-pointer"
-              >
-                Login
-              </button>
-            )}
           </div>
         </div>
       </div>

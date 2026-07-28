@@ -12,7 +12,6 @@ export default function Home() {
       <main>
         <NavContents />
         <Hero />
-        <Latest />
         <Posts />
       </main>
       <Footer />

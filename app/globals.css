@@ -4,6 +4,7 @@
   --color-brand-red: #e50000;
   --animate-marquee: marquee 25s linear infinite;
 
+
   @keyframes marquee {
     from {
       transform: translateX(100%);
@@ -33,6 +34,9 @@ body {
 }
 
 @layer utilities {
+  .animate-marquee-mobile {
+    animation: marquee 15s linear infinite;
+  }
   .shadow-premium {
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
   }
