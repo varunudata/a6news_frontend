@@ -6,6 +6,12 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import NavContents from "../../../components/layout/NavContents";
 
+const getEmbedUrl = (url) => {
+  if (!url) return null;
+  const videoIdMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?\n]+)/);
+  return videoIdMatch && videoIdMatch[1] ? `https://www.youtube.com/embed/${videoIdMatch[1]}` : null;
+};
+
 export default function SinglePostPage() {
   const params = useParams();
   const slug = params?.slug;
@@ -113,6 +119,18 @@ export default function SinglePostPage() {
                   className="rounded-lg w-full h-40 object-cover shadow"
                 />
               ))}
+            </div>
+          )}
+          {post.youtubeLink && getEmbedUrl(post.youtubeLink) && (
+            <div className="mt-8 mb-6 rounded-xl overflow-hidden shadow-lg border">
+              <iframe
+                className="w-full aspect-video"
+                src={getEmbedUrl(post.youtubeLink)}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
             </div>
           )}
         </div>

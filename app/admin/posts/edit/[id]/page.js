@@ -18,6 +18,7 @@ export default function EditPostPage({ params }) {
   const [categoryId, setCategoryId] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState("");
+  const [youtubeLink, setYoutubeLink] = useState("");
   const [thumbnail, setThumbnail] = useState(null);
   const [gallery, setGallery] = useState([]);
 
@@ -70,6 +71,7 @@ export default function EditPostPage({ params }) {
         setCategoryId(String(post.categoryId));
         setContent(post.content);
         setTags(post.tags.join(", "));
+        setYoutubeLink(post.youtubeLink || "");
         setThumbnail(post.thumbnail);
         setGallery(post.gallery || []);
       } finally {
@@ -147,6 +149,7 @@ export default function EditPostPage({ params }) {
           categoryId,
           content,
           tags: tags.split(",").map((t) => t.trim()),
+          youtubeLink,
           thumbnail,
           gallery,
         }),
@@ -232,6 +235,16 @@ export default function EditPostPage({ params }) {
             className="w-full px-3 py-2 border rounded-lg mt-1"
             value={tags}
             onChange={(e) => setTags(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <label className="font-medium">YouTube Video Link (Optional)</label>
+          <input
+            className="w-full px-3 py-2 border rounded-lg mt-1"
+            value={youtubeLink}
+            onChange={(e) => setYoutubeLink(e.target.value)}
+            placeholder="https://www.youtube.com/watch?v=..."
           />
         </div>
 

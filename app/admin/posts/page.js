@@ -12,6 +12,8 @@ export default function AllPostsPage() {
   const [loading, setLoading] = useState(true);
   const [deleteId, setDeleteId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const router = useRouter();
@@ -19,10 +21,11 @@ export default function AllPostsPage() {
   const fetchPosts = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${backendUrl}/api/posts`);
+      const res = await fetch(`${backendUrl}/api/posts?limit=5&page=${page}`);
       const data = await res.json();
       if (data.success) {
         setPosts(data.data);
+        setTotalPages(data.pagination?.totalPages || 1);
       } else {
         toast.error("Failed to load posts");
       }
@@ -32,7 +35,7 @@ export default function AllPostsPage() {
     } finally {
       setLoading(false);
     }
-  }, [backendUrl]);
+  }, [backendUrl, page]);
 
   useEffect(() => {
     fetchPosts();
@@ -160,6 +163,28 @@ export default function AllPostsPage() {
           </table>
         )}
       </div>
+
+      {!loading && totalPages > 1 && (
+        <div className="flex items-center justify-between mt-6 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            className="px-4 py-2 border rounded-lg text-sm font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          >
+            Previous
+          </button>
+          <span className="text-sm text-gray-600 font-medium">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage(page + 1)}
+            className="px-4 py-2 border rounded-lg text-sm font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          >
+            Next
+          </button>
+        </div>
+      )}
 
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 px-4">
