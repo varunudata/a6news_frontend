@@ -122,11 +122,17 @@ export default function AllPostsPage() {
                   className="border-b hover:bg-gray-50 transition"
                 >
                   <td className="py-3 px-4">
-                    <img
-                      src={post.thumbnail}
-                      alt={post.title}
-                      className="h-14 w-20 object-cover rounded border"
-                    />
+                    {post.thumbnail ? (
+                      <img
+                        src={post.thumbnail}
+                        alt={post.title}
+                        className="h-14 w-20 object-cover rounded border"
+                      />
+                    ) : (
+                      <div className="h-14 w-20 bg-gray-100 rounded border flex items-center justify-center text-xs text-gray-400">
+                        No image
+                      </div>
+                    )}
                   </td>
                   <td className="py-3 px-4 font-medium">{post.title}</td>
                   <td className="py-3 px-4 text-sm text-gray-700">

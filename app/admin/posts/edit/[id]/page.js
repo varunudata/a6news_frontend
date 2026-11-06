@@ -5,11 +5,12 @@ import { useEffect, useState } from "react";
 import { Upload, X, Loader } from "lucide-react";
 import { uploadToCloudinary } from "../../../../../utils/uploadToCloudinary";
 import { toast, ToastContainer } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { isTokenExpired } from "../../../../../utils/auth";
 
-export default function EditPostPage({ params }) {
-  const [postId, setPostId] = useState(null);
+export default function EditPostPage() {
+  const params = useParams();
+  const postId = params?.id;
   const router = useRouter();
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -28,12 +29,6 @@ export default function EditPostPage({ params }) {
   const [thumbnailLoading, setThumbnailLoading] = useState(false);
   const [galleryLoading, setGalleryLoading] = useState(false);
   const [updating, setUpdating] = useState(false);
-
-  useEffect(() => {
-    Promise.resolve(params).then((p) => {
-      setPostId(p.id);
-    });
-  }, [params]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -70,7 +65,7 @@ export default function EditPostPage({ params }) {
         setSubtitle(post.subtitle || "");
         setCategoryId(String(post.categoryId));
         setContent(post.content);
-        setTags(post.tags.join(", "));
+        setTags(Array.isArray(post.tags) ? post.tags.join(", ") : "");
         setYoutubeLink(post.youtubeLink || "");
         setThumbnail(post.thumbnail);
         setGallery(post.gallery || []);
@@ -148,7 +143,7 @@ export default function EditPostPage({ params }) {
           subtitle,
           categoryId,
           content,
-          tags: tags.split(",").map((t) => t.trim()),
+          tags: tags ? tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
           youtubeLink,
           thumbnail,
           gallery,

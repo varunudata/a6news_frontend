@@ -1,11 +1,19 @@
 export const isTokenExpired = (token) => {
   if (!token) return true;
   try {
-    const base64Url = token.split(".")[1];
+    const parts = token.split(".");
+    if (parts.length < 2) return true;
+    const base64Url = parts[1];
     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const decodedStr =
+      typeof window !== "undefined" && typeof window.atob === "function"
+        ? window.atob(base64)
+        : typeof Buffer !== "undefined"
+        ? Buffer.from(base64, "base64").toString("binary")
+        : "";
+    if (!decodedStr) return true;
     const jsonPayload = decodeURIComponent(
-      window
-        .atob(base64)
+      decodedStr
         .split("")
         .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
         .join("")

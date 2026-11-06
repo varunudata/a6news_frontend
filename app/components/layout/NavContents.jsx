@@ -26,7 +26,7 @@ export default function NavContents() {
     };
 
     fetchCategories();
-  }, []);
+  }, [backendUrl]);
 
   // Auto-scroll the active category to the center
   useEffect(() => {

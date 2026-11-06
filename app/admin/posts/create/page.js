@@ -106,7 +106,7 @@ export default function CreatePostsPage() {
           subtitle,
           content,
           categoryId,
-          tags: tags.split(",").map((t) => t.trim()),
+          tags: tags ? tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
           thumbnail,
           youtubeLink,
           gallery,

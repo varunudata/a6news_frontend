@@ -51,14 +51,18 @@ export default function Navbar() {
             <div className="absolute inset-0 flex items-center z-10">
               <div className="w-full overflow-hidden">
                 <div className="animate-marquee-mobile sm:animate-marquee whitespace-nowrap text-[#E50000] font-medium text-sm">
-                  {tickerText.split('•').map((item, index, array) => (
-                    <span key={index}>
-                      {item}
-                      {index < array.length - 1 && (
-                        <span className="mx-8 text-red-300 font-bold">•</span>
-                      )}
-                    </span>
-                  ))}
+                  {tickerText
+                    .split(/[•\n]+/)
+                    .map((item) => item.trim())
+                    .filter(Boolean)
+                    .map((item, index, array) => (
+                      <span key={index}>
+                        {item}
+                        {index < array.length - 1 && (
+                          <span className="mx-8 text-red-300 font-bold">•</span>
+                        )}
+                      </span>
+                    ))}
                   <span className="pr-16"></span>
                 </div>
               </div>

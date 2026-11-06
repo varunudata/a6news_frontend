@@ -3,6 +3,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 import NavContents from "../../../components/layout/NavContents";
 
 export default function CategoryPage() {
@@ -110,12 +111,12 @@ export default function CategoryPage() {
                     <p className="text-sm text-gray-600 mt-2 line-clamp-3">
                       {post.subtitle || post.content.slice(0, 100)}
                     </p>
-                    <a
+                    <Link
                       href={`/posts/${post.slug}`}
                       className="mt-4 inline-block bg-red-600 text-white px-4 py-2 rounded-md text-sm font-semibold hover:bg-red-700"
                     >
                       Read More →
-                    </a>
+                    </Link>
                   </div>
                 </div>
               ))}
