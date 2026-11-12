@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { Save, RefreshCw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { isTokenExpired } from "../../../utils/auth";
+import Loader from "../../components/shared/Loader";
 
 export default function TickerPage() {
   const router = useRouter();
@@ -31,7 +32,11 @@ export default function TickerPage() {
         setLoading(false);
       }
     };
-    fetchTicker();
+    if (backendUrl) {
+      fetchTicker();
+    } else {
+      setLoading(false);
+    }
   }, [backendUrl]);
 
   const handleSave = async () => {
@@ -82,88 +87,121 @@ export default function TickerPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-[50vh] text-lg font-medium text-gray-500">
-        <RefreshCw className="animate-spin mr-2" size={20} />
-        Loading news ticker configuration...
+      <div className="min-h-[50vh] flex items-center justify-center">
+        <Loader label="Loading news ticker configuration..." size="lg" />
       </div>
     );
   }
 
+  const previewItems = text
+    ? text
+        .split(/[•\n]+/)
+        .map((t) => t.trim())
+        .filter(Boolean)
+    : [];
+
   return (
     <div className="max-w-4xl">
-      <ToastContainer />
-      <div className="mb-8">
-        <h1 className="text-3xl font-semibold tracking-tight">Latest News Ticker</h1>
-        <p className="text-gray-500 mt-1">
-          Update the scrolling announcement text shown on the homepage of your website.
+      <ToastContainer position="top-right" autoClose={2500} />
+
+      <div className="mb-6 pb-5 border-b border-gray-200">
+        <span className="text-xs font-bold uppercase tracking-widest text-[#E50000]">
+          Live Breaking Bar
+        </span>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight mt-0.5">
+          Latest News Ticker
+        </h1>
+        <p className="text-gray-500 text-xs sm:text-sm mt-1">
+          Update the scrolling announcement headlines shown in the top header of A6News.
         </p>
       </div>
 
       {/* Live Preview Section */}
-      <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6 mb-8">
-        <h2 className="text-lg font-medium text-gray-800 mb-4">Live Preview</h2>
-        
-        <div className="flex items-center w-full bg-[#FFEBEB] rounded-md overflow-hidden relative border border-red-100 select-none">
-          {/* Latest Badge */}
-          <div className="relative flex items-center bg-[#E50000] px-5 py-2.5 z-10 shrink-0">
-            <span className="text-white font-bold tracking-wider uppercase text-xs">Latest</span>
-            <div className="absolute -right-3 top-0 bottom-0 w-6 bg-[#E50000] -skew-x-12 translate-x-1/2 z-10"></div>
-          </div>
+      <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+          Live Header Preview
+        </h2>
 
-          {/* Ticker Content */}
-          <div className="relative flex-1 h-full overflow-hidden flex items-center pl-6">
-            <div className="animate-marquee whitespace-nowrap text-[#E50000] font-medium text-xs sm:text-sm py-2.5">
-              {text || "Enter ticker text below to see live preview..."}
-            </div>
+        <div className="flex items-center gap-3 w-full bg-red-50/70 rounded-lg px-3.5 py-2.5 overflow-hidden border border-red-100 select-none">
+          <span className="inline-flex items-center gap-1.5 bg-[#E50000] text-white text-xs font-bold tracking-wide px-2.5 py-1 rounded shrink-0">
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            తాజా వార్తలు
+          </span>
+
+          <div className="flex-1 min-w-0 overflow-hidden">
+            {previewItems.length > 0 ? (
+              <div className="ticker-marquee text-[#E50000] font-semibold text-xs sm:text-sm">
+                {previewItems.map((item, idx) => (
+                  <span key={idx} className="inline-flex items-center">
+                    <span>{item}</span>
+                    {idx < previewItems.length - 1 && (
+                      <span className="mx-6 text-red-400 font-bold">•</span>
+                    )}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <span className="text-xs sm:text-sm text-red-400">
+                Enter ticker headlines below to see live preview...
+              </span>
+            )}
           </div>
         </div>
       </div>
 
       {/* Editor Section */}
-      <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
-        <h2 className="text-lg font-medium text-gray-800 mb-4">Edit Ticker Text</h2>
-        
+      <div className="bg-white border border-gray-200 rounded-xl p-6">
+        <h2 className="text-base font-extrabold text-gray-900 mb-4">
+          Edit Ticker Headlines
+        </h2>
+
         <div className="space-y-4">
           <div>
-            <label htmlFor="ticker-text" className="block text-sm font-medium text-gray-700 mb-1">
-              Ticker Content
+            <label
+              htmlFor="ticker-text"
+              className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5"
+            >
+              Headlines Content
             </label>
             <textarea
               id="ticker-text"
-              rows={4}
+              rows={6}
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="e.g. Breaking: New Tech Regulations Announced • AI is reshaping content creation • Stock markets open higher today..."
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all font-sans text-sm"
+              placeholder="Enter each headline on a new line or separate with bullet points (•)..."
+              className="w-full border border-gray-300 rounded-lg p-3.5 focus:outline-none focus:border-[#E50000] transition-colors text-sm leading-relaxed"
             />
-            <p className="text-xs text-gray-500 mt-1">
-              Tip: Use bullet points (•) or dashes to separate multiple headlines.
+            <p className="text-xs text-gray-500 mt-1.5">
+              Tip: Place each breaking news item on a new line or separate with{" "}
+              <span className="font-bold text-[#E50000]">•</span> bullets.
             </p>
           </div>
 
           <div className="flex items-center gap-3 pt-2">
             <button
+              type="button"
               onClick={handleSave}
               disabled={saving || text.trim() === ""}
-              className="flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium text-sm transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#E50000] hover:bg-red-700 text-white rounded-lg font-bold text-xs sm:text-sm transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {saving ? (
                 <>
                   <RefreshCw className="animate-spin" size={16} />
-                  Saving...
+                  <span>Saving...</span>
                 </>
               ) : (
                 <>
                   <Save size={16} />
-                  Save Changes
+                  <span>Save Changes</span>
                 </>
               )}
             </button>
 
             <button
+              type="button"
               onClick={handleReset}
               disabled={saving || text === originalText}
-              className="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium text-sm transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-5 py-2.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg font-bold text-xs sm:text-sm transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Reset
             </button>

@@ -2,17 +2,6 @@
 
 @theme {
   --color-brand-red: #e50000;
-  --animate-marquee: marquee 25s linear infinite;
-
-
-  @keyframes marquee {
-    from {
-      transform: translateX(100%);
-    }
-    to {
-      transform: translateX(-100%);
-    }
-  }
 }
 
 html {
@@ -33,11 +22,24 @@ body {
   scrollbar-width: none;
 }
 
-@layer utilities {
-  .animate-marquee-mobile {
-    animation: marquee 15s linear infinite;
+@keyframes ticker-scroll {
+  0% {
+    transform: translate3d(0%, 0, 0);
   }
-  .shadow-premium {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  100% {
+    transform: translate3d(-100%, 0, 0);
   }
+}
+
+.ticker-marquee {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  padding-left: 1rem;
+  animation: ticker-scroll 28s linear infinite;
+  will-change: transform;
+}
+
+.ticker-marquee:hover {
+  animation-play-state: paused;
 }

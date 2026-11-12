@@ -2,11 +2,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Upload, X, Loader } from "lucide-react";
+import { Upload, X, Loader as LucideLoader, ArrowLeft } from "lucide-react";
 import { uploadToCloudinary } from "../../../../../utils/uploadToCloudinary";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter, useParams } from "next/navigation";
+import Link from "next/link";
 import { isTokenExpired } from "../../../../../utils/auth";
+import Loader from "../../../../components/shared/Loader";
 
 export default function EditPostPage() {
   const params = useParams();
@@ -37,12 +39,14 @@ export default function EditPostPage() {
           cache: "no-store",
         });
         const data = await res.json();
-        if (data.success) setCategories(data.data);
-      } catch (err) {
+        if (data.success) setCategories(data.data || []);
+      } catch {
         toast.error("Failed to load categories");
       }
     };
-    fetchCategories();
+    if (backendUrl) {
+      fetchCategories();
+    }
   }, [backendUrl]);
 
   useEffect(() => {
@@ -86,7 +90,7 @@ export default function EditPostPage() {
       setThumbnail(url);
       toast.success("Thumbnail updated");
     } catch (err) {
-      toast.error("Thumbnail upload failed");
+      toast.error(err.message || "Thumbnail upload failed");
     } finally {
       setThumbnailLoading(false);
     }
@@ -107,14 +111,14 @@ export default function EditPostPage() {
       setGallery((prev) => [...prev, ...uploaded]);
       toast.success("Gallery updated");
     } catch (err) {
-      toast.error("Gallery upload failed");
+      toast.error(err.message || "Gallery upload failed");
     } finally {
       setGalleryLoading(false);
     }
   };
 
   const handleUpdate = async () => {
-    if (!title || !content || !categoryId || !thumbnail) {
+    if (!title.trim() || !content.trim() || !categoryId || !thumbnail) {
       toast.error("Please fill all required fields");
       return;
     }
@@ -139,12 +143,17 @@ export default function EditPostPage() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          title,
-          subtitle,
+          title: title.trim(),
+          subtitle: subtitle.trim(),
           categoryId,
           content,
-          tags: tags ? tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
-          youtubeLink,
+          tags: tags
+            ? tags
+                .split(",")
+                .map((t) => t.trim())
+                .filter(Boolean)
+            : [],
+          youtubeLink: youtubeLink.trim(),
           thumbnail,
           gallery,
         }),
@@ -159,108 +168,143 @@ export default function EditPostPage() {
         }, 1000);
       } else {
         toast.error(data.message || "Update failed");
+        setUpdating(false);
       }
-    } catch (err) {
+    } catch {
       toast.error("Server error");
-    } finally {
       setUpdating(false);
     }
   };
 
   if (loadingPost) {
     return (
-      <div className="min-h-[70vh] flex items-center justify-center text-gray-600">
-        Loading post details...
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <Loader label="Loading post details..." size="lg" />
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl">
-      <ToastContainer />
-      <h1 className="text-3xl font-semibold mb-6">Edit Post</h1>
-      <div className="bg-white p-6 rounded-xl shadow border border-gray-200 space-y-6">
+    <div className="max-w-5xl">
+      <ToastContainer position="top-right" autoClose={2500} />
+
+      <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
         <div>
-          <label className="font-medium">Title *</label>
-          <input
-            className="w-full px-3 py-2 border rounded-lg mt-1"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+          <Link
+            href="/admin/posts"
+            className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-gray-500 hover:text-[#E50000] mb-1 transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Back to All Posts
+          </Link>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
+            Edit Post
+          </h1>
+        </div>
+      </div>
+
+      <div className="bg-white p-6 sm:p-8 rounded-xl border border-gray-200 space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="md:col-span-2">
+            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
+              Title <span className="text-[#E50000]">*</span>
+            </label>
+            <input
+              className="w-full px-3.5 py-2.5 text-sm border border-gray-300 rounded-lg focus:border-[#E50000] focus:outline-none"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
+              Category <span className="text-[#E50000]">*</span>
+            </label>
+            <select
+              className="w-full px-3.5 py-2.5 text-sm border border-gray-300 rounded-lg bg-white focus:border-[#E50000] focus:outline-none cursor-pointer"
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
+            >
+              <option value="">Select Category</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div>
-          <label className="font-medium">Subtitle</label>
+          <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
+            Subtitle
+          </label>
           <input
-            className="w-full px-3 py-2 border rounded-lg mt-1"
+            className="w-full px-3.5 py-2.5 text-sm border border-gray-300 rounded-lg focus:border-[#E50000] focus:outline-none"
             value={subtitle}
             onChange={(e) => setSubtitle(e.target.value)}
           />
         </div>
 
         <div>
-          <label className="font-medium">Category *</label>
-          <select
-            className="w-full px-3 py-2 border rounded-lg mt-1"
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-          >
-            <option value="">Select Category</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="font-medium">Content *</label>
+          <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
+            Article Content <span className="text-[#E50000]">*</span>
+          </label>
           <textarea
-            rows="8"
-            className="w-full px-3 py-2 border rounded-lg mt-1"
+            rows="10"
+            className="w-full px-3.5 py-2.5 text-sm border border-gray-300 rounded-lg focus:border-[#E50000] focus:outline-none leading-relaxed"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-          ></textarea>
-        </div>
-
-        <div>
-          <label className="font-medium">Tags</label>
-          <input
-            className="w-full px-3 py-2 border rounded-lg mt-1"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
           />
         </div>
 
-        <div>
-          <label className="font-medium">YouTube Video Link (Optional)</label>
-          <input
-            className="w-full px-3 py-2 border rounded-lg mt-1"
-            value={youtubeLink}
-            onChange={(e) => setYoutubeLink(e.target.value)}
-            placeholder="https://www.youtube.com/watch?v=..."
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
+              Tags (Comma separated)
+            </label>
+            <input
+              className="w-full px-3.5 py-2.5 text-sm border border-gray-300 rounded-lg focus:border-[#E50000] focus:outline-none"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
+              YouTube Video Link (Optional)
+            </label>
+            <input
+              className="w-full px-3.5 py-2.5 text-sm border border-gray-300 rounded-lg focus:border-[#E50000] focus:outline-none"
+              value={youtubeLink}
+              onChange={(e) => setYoutubeLink(e.target.value)}
+              placeholder="https://www.youtube.com/watch?v=..."
+            />
+          </div>
         </div>
 
-        <div>
-          <label className="font-medium">Thumbnail *</label>
+        {/* Thumbnail Upload */}
+        <div className="pt-2 border-t border-gray-100">
+          <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+            Main Thumbnail <span className="text-[#E50000]">*</span>
+          </label>
 
           <label
-            className={`mt-2 flex items-center gap-2 px-4 py-2 rounded-lg border cursor-pointer ${
+            className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors ${
               thumbnailLoading
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-gray-100 hover:bg-gray-200"
+                ? "bg-gray-100 text-gray-500 border-gray-200 cursor-not-allowed"
+                : "bg-white border-gray-300 text-gray-700 hover:border-[#E50000] hover:text-[#E50000]"
             }`}
           >
             {thumbnailLoading ? (
               <>
-                <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-                Uploading...
+                <div className="w-4 h-4 border-2 border-[#E50000] border-t-transparent rounded-full animate-spin" />
+                <span>Uploading...</span>
               </>
             ) : (
               <>
-                <Upload size={18} /> Upload Thumbnail
+                <Upload size={16} />
+                <span>Replace Thumbnail</span>
               </>
             )}
 
@@ -274,10 +318,15 @@ export default function EditPostPage() {
           </label>
 
           {thumbnail && (
-            <div className="mt-3 relative w-40">
-              <img src={thumbnail} alt="Thumbnail preview" className="rounded-lg border" />
+            <div className="mt-4 relative w-full max-w-md aspect-[16/9] rounded-xl border border-gray-200 bg-neutral-100 overflow-hidden flex items-center justify-center">
+              <img
+                src={thumbnail}
+                alt="Thumbnail preview"
+                className="w-full h-full object-contain block"
+              />
               <button
-                className="absolute top-1 right-1 bg-black/50 text-white p-1 rounded"
+                type="button"
+                className="absolute top-2 right-2 bg-black/75 hover:bg-[#E50000] text-white p-1.5 rounded-lg transition-colors cursor-pointer"
                 onClick={() => setThumbnail(null)}
               >
                 <X size={14} />
@@ -286,18 +335,28 @@ export default function EditPostPage() {
           )}
         </div>
 
-        <div>
-          <label className="font-medium">Gallery</label>
+        {/* Gallery Upload */}
+        <div className="pt-2 border-t border-gray-100">
+          <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+            Project Gallery
+          </label>
 
-          <label className="mt-2 flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-lg border hover:bg-gray-200 cursor-pointer">
+          <label
+            className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors ${
+              galleryLoading
+                ? "bg-gray-100 text-gray-500 border-gray-200 cursor-not-allowed"
+                : "bg-white border-gray-300 text-gray-700 hover:border-[#E50000] hover:text-[#E50000]"
+            }`}
+          >
             {galleryLoading ? (
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-                Uploading...
-              </div>
+              <>
+                <div className="w-4 h-4 border-2 border-[#E50000] border-t-transparent rounded-full animate-spin" />
+                <span>Uploading...</span>
+              </>
             ) : (
               <>
-                <Upload size={18} /> Upload Images
+                <Upload size={16} />
+                <span>Add Gallery Images</span>
               </>
             )}
 
@@ -311,35 +370,49 @@ export default function EditPostPage() {
             />
           </label>
 
-          <div className="grid grid-cols-4 gap-3 mt-3">
-            {gallery.map((img, index) => (
-              <div className="relative" key={index}>
-                <img
-                  src={img}
-                  alt={`Gallery preview ${index + 1}`}
-                  className="h-24 w-full rounded-lg border object-cover"
-                />
-                <button
-                  className="absolute top-1 right-1 bg-black/60 text-white p-1 rounded cursor-pointer"
-                  onClick={() =>
-                    setGallery(gallery.filter((_, i) => i !== index))
-                  }
+          {gallery.length > 0 && (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mt-4">
+              {gallery.map((img, index) => (
+                <div
+                  className="relative aspect-[16/10] rounded-lg border border-gray-200 bg-neutral-100 overflow-hidden flex items-center justify-center"
+                  key={index}
                 >
-                  <X size={14} />
-                </button>
-              </div>
-            ))}
-          </div>
+                  <img
+                    src={img}
+                    alt={`Gallery preview ${index + 1}`}
+                    className="w-full h-full object-contain block"
+                  />
+                  <button
+                    type="button"
+                    className="absolute top-1.5 right-1.5 bg-black/75 hover:bg-[#E50000] text-white p-1 rounded transition-colors cursor-pointer"
+                    onClick={() =>
+                      setGallery(gallery.filter((_, i) => i !== index))
+                    }
+                  >
+                    <X size={13} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        <div className="flex justify-end">
+        {/* Submit Actions */}
+        <div className="pt-4 border-t border-gray-200 flex items-center justify-end gap-3">
+          <Link
+            href="/admin/posts"
+            className="px-5 py-2.5 border border-gray-300 rounded-lg text-xs sm:text-sm font-bold text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            Cancel
+          </Link>
           <button
+            type="button"
             onClick={handleUpdate}
             disabled={updating}
-            className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 flex items-center gap-2 cursor-pointer"
+            className="px-6 py-2.5 bg-[#E50000] text-white text-xs sm:text-sm font-bold rounded-lg hover:bg-red-700 disabled:opacity-50 flex items-center gap-2 transition-colors cursor-pointer"
           >
-            {updating && <Loader size={16} className="animate-spin" />}
-            Update Post
+            {updating && <LucideLoader size={16} className="animate-spin" />}
+            <span>{updating ? "Updating..." : "Update Post"}</span>
           </button>
         </div>
       </div>
