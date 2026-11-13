@@ -4,7 +4,7 @@
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { ArrowRight, Calendar, ChevronLeft, ChevronRight, Newspaper, PlayCircle } from "lucide-react";
-import Loader, { CardGridSkeleton } from "../shared/Loader";
+import Loader from "../shared/Loader";
 
 function formatDate(dateString) {
   if (!dateString) return "";
@@ -172,7 +172,7 @@ export default function Posts() {
           </div>
 
           {loadingTop ? (
-            <CardGridSkeleton count={6} />
+            <Loader label="వార్తలు లోడ్ అవుతున్నాయి..." />
           ) : topPosts.length === 0 ? (
             <div className="border border-gray-200 rounded-xl p-10 text-center text-gray-500">
               ప్రస్తుతం వార్తలు అందుబాటులో లేవు.
@@ -210,10 +210,7 @@ export default function Posts() {
           </div>
 
           {loadingRecent ? (
-            <>
-              <Loader label="వార్తలు లోడ్ అవుతున్నాయి..." />
-              <CardGridSkeleton count={6} />
-            </>
+            <Loader label="వార్తలు లోడ్ అవుతున్నాయి..." />
           ) : recentPosts.length === 0 ? (
             <div className="bg-white border border-gray-200 rounded-xl p-10 text-center text-gray-500">
               ప్రస్తుతం వార్తలు అందుబాటులో లేవు.

@@ -13,7 +13,7 @@ import {
   PlayCircle,
   SlidersHorizontal,
 } from "lucide-react";
-import Loader, { CardGridSkeleton } from "../../../components/shared/Loader";
+import Loader from "../../../components/shared/Loader";
 
 function formatDate(dateString) {
   if (!dateString) return "";
@@ -116,7 +116,7 @@ export default function CategoryPage() {
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight uppercase">
-              {category?.name || (loading ? "లోడ్ అవుతోంది..." : "విభాగం")}
+              {category?.name || "విభాగం"}
             </h1>
             {!loading && pagination.totalPosts !== undefined && (
               <span className="bg-red-50 text-[#E50000] border border-red-200 text-xs font-bold px-2.5 py-0.5 rounded">
@@ -145,10 +145,9 @@ export default function CategoryPage() {
 
       {/* Main Content */}
       {loading ? (
-        <>
-          <Loader label="విభాగం వార్తలు లోడ్ అవుతున్నాయి..." />
-          <CardGridSkeleton count={6} />
-        </>
+        <div className="py-16">
+          <Loader label="విభాగం వార్తలు లోడ్ అవుతున్నాయి..." size="lg" />
+        </div>
       ) : posts.length === 0 ? (
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-12 text-center">
           <Newspaper className="w-10 h-10 text-gray-400 mx-auto mb-3 stroke-[1.5]" />

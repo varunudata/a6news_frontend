@@ -15,7 +15,7 @@ import {
   Tag,
   X,
 } from "lucide-react";
-import Loader, { ArticleSkeleton } from "../../../components/shared/Loader";
+import Loader from "../../../components/shared/Loader";
 
 const getEmbedUrl = (url) => {
   if (!url) return null;
@@ -103,10 +103,9 @@ export default function SinglePostPage() {
 
   if (loading) {
     return (
-      <>
-        <Loader label="కథనం లోడ్ అవుతోంది..." />
-        <ArticleSkeleton />
-      </>
+      <div className="py-20">
+        <Loader label="కథనం లోడ్ అవుతోంది..." size="lg" />
+      </div>
     );
   }
 
