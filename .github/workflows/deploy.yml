@@ -1,0 +1,112 @@
+
+name: Deploy A6News Frontend
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: a6news-frontend-deployment
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build and Deploy to EC2
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js application
+        env:
+          NEXT_PUBLIC_BACKEND_URL: https://a6newsinfra.com
+        run: npm run build
+
+      - name: Package standalone application
+        run: |
+          cp -a .next/static .next/standalone/.next/static
+          cp -a public .next/standalone/public
+          tar -czf a6news-frontend.tar.gz -C .next standalone
+
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.EC2_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Transfer frontend package
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+        run: |
+          scp -i ~/.ssh/id_ed25519 \
+            -o BatchMode=yes \
+            a6news-frontend.tar.gz \
+            "$EC2_USER@$EC2_HOST:~/A6News/"
+
+      - name: Deploy frontend
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+        run: |
+          ssh -i ~/.ssh/id_ed25519 \
+            -o BatchMode=yes \
+            "$EC2_USER@$EC2_HOST" \
+            'export PATH=/home/ubuntu/.nvm/versions/node/v22.23.4/bin:$PATH &&
+             cd ~/A6News &&
+             rm -rf frontend-release &&
+             mkdir frontend-release &&
+             tar -xzf a6news-frontend.tar.gz -C frontend-release &&
+             test -f frontend-release/standalone/server.js &&
+             rm -rf standalone-previous &&
+             if [ -d standalone ]; then
+               mv standalone standalone-previous
+             fi &&
+             mv frontend-release/standalone standalone &&
+             if pm2 restart a6news-frontend --update-env; then
+               pm2 save &&
+               rm -rf standalone-backup &&
+               if [ -d standalone-previous ]; then
+                 mv standalone-previous standalone-backup
+               fi &&
+               rm -rf frontend-release a6news-frontend.tar.gz
+             else
+               echo "Deployment failed. Rolling back..."
+               rm -rf standalone
+               if [ -d standalone-previous ]; then
+                 mv standalone-previous standalone
+               fi
+               pm2 restart a6news-frontend --update-env
+               exit 1
+             fi'
+
+
