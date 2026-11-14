@@ -36,6 +36,8 @@ jobs:
       - name: Build Next.js application
         env:
           NEXT_PUBLIC_BACKEND_URL: https://a6newsinfra.com
+          NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME }}
+          NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: ${{ secrets.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET }}
         run: npm run build
 
       - name: Package standalone application
@@ -108,5 +110,3 @@ jobs:
                pm2 restart a6news-frontend --update-env
                exit 1
              fi'
-
-
